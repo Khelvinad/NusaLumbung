@@ -13,6 +13,10 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'petani']);
+        Role::firstOrCreate(['name' => 'pembeli']);
     }
 }
