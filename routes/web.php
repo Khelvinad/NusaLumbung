@@ -22,3 +22,5 @@ Route::get('/keranjang', function () {
     return view('keranjang');
 });
 
+require __DIR__.'/auth.php';
+

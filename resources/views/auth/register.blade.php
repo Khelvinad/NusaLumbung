@@ -31,7 +31,7 @@
 
             <h2 class="text-2xl font-bold text-[#1A1C19] mb-6">Daftar Akun Baru</h2>
 
-            <form action="#" method="POST" class="space-y-4">
+            <form action="{{ route('register') }}" method="POST" class="space-y-4">
                 @csrf
 
                 {{-- Nama Lengkap --}}
@@ -115,4 +115,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.add("text-[#2D5A27]");
+        } else {
+            input.type = "password";
+            icon.classList.remove("text-[#2D5A27]");
+        }
+    }
+</script>
+
 @endsection

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\PetaniProfile;
+use App\Models\PembeliProfile;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +35,8 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:15'], 
+            'role' => ['required', 'string', 'in:petani,pembeli'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -41,6 +45,22 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $user->assignRole($request->role);
+
+        if ($request->role === 'petani') {
+            PetaniProfile::create([
+                'user_id' => $user->id,
+                'no_telp' => $request->phone,
+                'nama_tani' => $request->name . ' Farm',
+                'lokasi' => 'Belum ditentukan',
+            ]);
+        } else {
+            PembeliProfile::create([
+                'user_id' => $user->id,
+                'no_telp' => $request->phone,
+            ]);
+        }
 
         event(new Registered($user));
 
