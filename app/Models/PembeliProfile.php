@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PembeliProfile extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',
+        'no_telp',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
