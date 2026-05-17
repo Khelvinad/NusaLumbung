@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HarvestPoolController;
 use App\Http\Controllers\CommodityPriceController;
 use App\Http\Controllers\ProfileController;
 
-Route::get('/', [ProductController::class, 'index'])->name('home');
+Route::get('/', [MarketplaceController::class, 'index'])->name('home');
 Route::get('/produk/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/komoditas', [CommodityPriceController::class, 'index'])->name('commodity.index');
 
@@ -27,7 +28,7 @@ Route::middleware(['auth', 'role:petani'])
         Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])
             ->name('orders.update-status');
 
-        Route::resource('harvest-pools', HarvestPoolController::class)->only(['index', 'show', 'store']);
+        Route::resource('harvest-pools', HarvestPoolController::class)->only(['index', 'show', 'create', 'store']);
         Route::post('/harvest-pools/{harvestPool}/join', [HarvestPoolController::class, 'join'])
             ->name('harvest-pools.join');
     });

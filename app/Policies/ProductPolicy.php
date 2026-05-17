@@ -44,6 +44,7 @@ class ProductPolicy
 
     protected function isOwner(User $user, Product $product): bool
     {
-        return (int) $user->id === (int) $product->user_id;
+        return $user->petaniProfile
+            && (int) $user->petaniProfile->id === (int) $product->petani_profile_id;
     }
 }
