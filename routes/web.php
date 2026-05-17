@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HarvestPoolController;
 use App\Http\Controllers\CommodityPriceController;
@@ -11,30 +12,29 @@ use App\Http\Controllers\PetaniController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 
-Route::get('/', [ProductController::class, 'index'])->name('home');
-
-// Marketplace
-Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');
-Route::get('/produk/{product}', [MarketplaceController::class, 'show'])->name('produk.show');
-Route::get('/petani/{user}', [MarketplaceController::class, 'petani'])->name('petani.show');
-
+Route::get('/', [MarketplaceController::class, 'index'])->name('home');
+Route::get('/produk/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/komoditas', [CommodityPriceController::class, 'index'])->name('commodity.index');
 
 Route::middleware(['auth', 'role:petani'])
     ->prefix('petani')
     ->name('petani.')
     ->group(function () {
-        Route::get('/dashboard', [PetaniController::class, 'dashboard'])->name('dashboard');
-        Route::get('/produk', [PetaniController::class, 'produkIndex'])->name('produk.index');
-        Route::get('/produk/create', [PetaniController::class, 'produkCreate'])->name('produk.create');
-        Route::post('/produk', [PetaniController::class, 'produkStore'])->name('produk.store');
-        Route::get('/produk/{product}/edit', [PetaniController::class, 'produkEdit'])->name('produk.edit');
-        Route::put('/produk/{product}', [PetaniController::class, 'produkUpdate'])->name('produk.update');
-        Route::delete('/produk/{product}', [PetaniController::class, 'produkDestroy'])->name('produk.destroy');
-        Route::patch('/orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
-        Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-        Route::resource('harvest-pools', HarvestPoolController::class)->only(['index', 'show', 'store']);
-        Route::post('/harvest-pools/{harvestPool}/join', [HarvestPoolController::class, 'join'])->name('harvest-pools.join');
+
+        Route::get('/dashboard', function () {
+            return view('petani.dashboard');
+        })->name('dashboard');
+
+        Route::resource('products', ProductController::class)->except(['index', 'show']);
+
+        Route::patch('/orders/{order}/confirm', [OrderController::class, 'confirm'])
+            ->name('orders.confirm');
+        Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])
+            ->name('orders.update-status');
+
+        Route::resource('harvest-pools', HarvestPoolController::class)->only(['index', 'show', 'create', 'store']);
+        Route::post('/harvest-pools/{harvestPool}/join', [HarvestPoolController::class, 'join'])
+            ->name('harvest-pools.join');
     });
 
 Route::middleware(['auth', 'role:pembeli'])
