@@ -23,16 +23,6 @@ class OrderPolicy
         return $user->hasRole('pembeli');
     }
 
-    public function update(User $user, Order $order): bool
-    {
-        return $this->isPembeli($user, $order);
-    }
-
-    public function delete(User $user, Order $order): bool
-    {
-        return $this->isPembeli($user, $order);
-    }
-
     public function confirm(User $user, Order $order): bool
     {
         return $this->isRelatedPetani($user, $order)
