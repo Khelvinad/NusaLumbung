@@ -14,9 +14,9 @@ Route::get('/register', function () {
     return view('auth.register');
 });
 
-Route::get('/produk', function () {
-    return view('produk');
-});
+use App\Http\Controllers\MarketplaceController;
+
+Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');
 
 Route::get('/keranjang', function () {
     return view('keranjang');
