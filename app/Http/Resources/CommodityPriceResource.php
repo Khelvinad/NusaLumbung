@@ -18,7 +18,7 @@ class CommodityPriceResource extends JsonResource
             'slug' => $this->slug,
             'unit' => $this->unit,
             'price' => $this->price,
-            'price_formatted' => 'Rp '.number_format((float) $this->price, 0, ',', '.'),
+            'price_formatted' => 'Rp '.number_format((float) $this->price, 2, ',', '.'),
             'source' => $this->source,
             'price_date' => $this->price_date->toDateString(),
             'updated_at' => $this->updated_at,
