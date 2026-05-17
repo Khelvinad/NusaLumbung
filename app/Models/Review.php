@@ -2,26 +2,30 @@
 
 namespace App\Models;
 
-use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Order extends Model
+class Review extends Model
 {
     protected $fillable = [
+        'order_id',
         'pembeli_id',
         'petani_id',
-        'status',
-        'total_amount',
+        'product_id',
+        'rating',
+        'comment',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => OrderStatus::class,
-            'total_amount' => 'decimal:2',
+            'rating' => 'integer',
         ];
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 
     public function pembeli(): BelongsTo
@@ -34,13 +38,8 @@ class Order extends Model
         return $this->belongsTo(User::class, 'petani_id');
     }
 
-    public function items(): HasMany
+    public function product(): BelongsTo
     {
-        return $this->hasMany(OrderItem::class);
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
+        return $this->belongsTo(Product::class);
     }
 }
