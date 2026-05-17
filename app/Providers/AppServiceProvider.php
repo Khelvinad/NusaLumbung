@@ -2,21 +2,25 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\HarvestPool;
+use App\Models\Order;
+use App\Models\Product;
+use App\Policies\HarvestPoolPolicy;
+use App\Policies\OrderPolicy;
+use App\Policies\ProductPolicy;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * @var array<class-string, class-string>
      */
-    public function register(): void
-    {
-        //
-    }
+    protected $policies = [
+        Product::class => ProductPolicy::class,
+        Order::class => OrderPolicy::class,
+        HarvestPool::class => HarvestPoolPolicy::class,
+    ];
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //

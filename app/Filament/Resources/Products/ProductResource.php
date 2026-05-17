@@ -4,38 +4,43 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
-use Filament\Forms\Form;
+use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
     protected static ?string $navigationLabel = 'Approval Produk';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([]);
+        return $schema->components([]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('foto'),
-                Tables\Columns\TextColumn::make('nama')
+                Tables\Columns\ImageColumn::make('photo_path'),
+                Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Petani')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('harga')
+                Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
                     ->sortable(),
-                Tables\Columns\ToggleColumn::make('is_approved')
-                    ->label('Approved (Tampil di Publik)'),
+                Tables\Columns\TextColumn::make('category')
+                    ->badge()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('stock')
+                    ->sortable(),
             ])
             ->filters([])
             ->actions([

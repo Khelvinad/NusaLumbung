@@ -4,20 +4,22 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Order;
-use Filament\Forms\Form;
+use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
     protected static ?string $navigationLabel = 'Pantau Order';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([]);
+        return $schema->components([]);
     }
 
     public static function table(Table $table): Table
@@ -33,7 +35,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('petani.name')
                     ->label('Petani')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('total_harga')
+                Tables\Columns\TextColumn::make('total_amount')
                     ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')

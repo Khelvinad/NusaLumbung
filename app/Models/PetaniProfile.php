@@ -9,7 +9,7 @@ class PetaniProfile extends Model
     protected $fillable = [
         'user_id',
         'no_telp',
-        'name_tani',
+        'farm_name',
         'location',
         'bio',
         'rating_avg',

@@ -7,12 +7,12 @@ use App\Models\User;
 
 class HarvestPoolPolicy
 {
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
         return true;
     }
 
-    public function view(User $user, HarvestPool $harvestPool): bool
+    public function view(?User $user, HarvestPool $harvestPool): bool
     {
         return true;
     }
@@ -20,6 +20,11 @@ class HarvestPoolPolicy
     public function create(User $user): bool
     {
         return $user->hasRole('petani');
+    }
+
+    public function join(User $user, HarvestPool $harvestPool): bool
+    {
+        return $user->hasRole('petani') && $harvestPool->isJoinable();
     }
 
     public function update(User $user, HarvestPool $harvestPool): bool
@@ -45,6 +50,6 @@ class HarvestPoolPolicy
     protected function isOwner(User $user, HarvestPool $harvestPool): bool
     {
         return $user->hasRole('petani')
-            && (int) $user->id === (int) $harvestPool->user_id;
+            && (int) $user->id === (int) $harvestPool->created_by;
     }
 }

@@ -35,15 +35,15 @@ class DemoUserSeeder extends Seeder
         );
         $petani->syncRoles(['petani']);
         PetaniProfile::updateOrCreate(
-            ['user_id' => $petani->id],
-            [
-                'no_telp' => '081234567801',
-                'name_tani' => 'Kebun Siti Rahayu',
-                'location' => 'Wonosobo, Jawa Tengah',
-                'bio' => 'Petani padi organik dengan pengalaman 12 tahun. Fokus pada beras merah dan gabah berkualitas.',
-                'rating_avg' => 4.75,
-            ],
-        );
+    ['user_id' => $petani->id],
+    [
+        'no_telp' => '081234567801',
+        'nama_tani' => 'Kebun Siti Rahayu',
+        'lokasi' => 'Wonosobo, Jawa Tengah',
+        'bio' => 'Petani padi organik dengan pengalaman 12 tahun. Fokus pada beras merah dan gabah berkualitas.',
+        'rating_avg' => 4.75,
+    ],
+);
 
         $pembeli = User::updateOrCreate(
             ['email' => 'pembeli@nusalumbung.test'],
@@ -57,7 +57,7 @@ class DemoUserSeeder extends Seeder
         PembeliProfile::updateOrCreate(
             ['user_id' => $pembeli->id],
             [
-                'call_num' => '081234567802',
+                'no_telp' => '081234567802',
                 'address' => 'Jl. Melati No. 8, Tebet, Jakarta Selatan, DKI Jakarta 12820',
             ],
         );

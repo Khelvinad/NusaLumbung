@@ -6,26 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('harvest_pools', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pembuat_id')->constrained('users')->cascadeOnDelete();
-            $table->string('nama_pool');
-            $table->integer('target_qty');
-            $table->integer('current_qty')->default(0);
+            $table->string('name');
+            $table->string('commodity');
+            $table->string('unit');
+            $table->decimal('target_qty', 12, 2);
+            $table->decimal('current_qty', 12, 2)->default(0);
+            $table->string('status')->default('open');
             $table->date('deadline');
-            $table->enum('status', ['open', 'fulfilled', 'closed'])->default('open');
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('harvest_pools');

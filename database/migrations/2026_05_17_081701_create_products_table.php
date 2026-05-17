@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // Petani pemilik
-            $table->foreignId('commodity_id')->nullable()->constrained('commodity_prices')->nullOnDelete();
-            $table->string('nama');
-            $table->text('deskripsi')->nullable();
-            $table->decimal('harga', 12, 2);
-            $table->integer('stok')->default(0); // Validasi controller tidak boleh negatif
-            $table->string('foto'); 
-            $table->date('estimasi_panen');
-            $table->boolean('is_approved')->default(false); // Sesuai task Filament approve/reject
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('price', 12, 2);
+            $table->integer('stock')->default(0);
+            $table->string('category');
+            $table->string('photo_path');
             $table->timestamps();
         });
     }
