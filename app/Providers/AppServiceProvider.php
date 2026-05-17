@@ -2,27 +2,24 @@
 
 namespace App\Providers;
 
-use App\Models\HarvestPool;
-use App\Models\Order;
-use App\Models\Product;
-use App\Policies\HarvestPoolPolicy;
-use App\Policies\OrderPolicy;
-use App\Policies\ProductPolicy;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * @var array<class-string, class-string>
-     */
-    protected $policies = [
-        Product::class => ProductPolicy::class,
-        Order::class => OrderPolicy::class,
-        HarvestPool::class => HarvestPoolPolicy::class,
-    ];
+    public function register(): void
+    {
+        //
+    }
 
     public function boot(): void
     {
-        //
+        RateLimiter::for('login', function (Request $request) {
+            $throttleKey = strtolower($request->input('email')) . '|' . $request->ip();
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
     }
 }
