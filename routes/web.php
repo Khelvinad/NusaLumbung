@@ -36,11 +36,7 @@ Route::middleware(['auth', 'role:pembeli'])
     ->prefix('pembeli')
     ->name('pembeli.')
     ->group(function () {
-
-        // Checkout (POST → butuh @csrf)
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-
-        // Riwayat & detail pesanan (GET → aman, tidak perlu CSRF)
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     });
