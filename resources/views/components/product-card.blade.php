@@ -12,7 +12,7 @@
 <div class="produk-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition" 
     data-kategori="{{ $dataKategori }}">
     <div class="relative h-48 overflow-hidden">
-        <img src="{{ asset('images/' . $gambar) }}" 
+        <img src="{{ $gambar ? asset('storage/' . $gambar) : asset('images/placeholder.jpg') }}" 
             alt="{{ $nama }}" 
             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
         <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
