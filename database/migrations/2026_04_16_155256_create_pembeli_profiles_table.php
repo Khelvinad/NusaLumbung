@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('pembeli_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-        
-            $table->string('call_num')->nullable();
+            $table->string('no_telp')->nullable();
             $table->text('address')->nullable();
             $table->timestamps();
         });

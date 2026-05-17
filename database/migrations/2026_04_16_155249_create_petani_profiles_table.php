@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignID('user_id')->constrained()->cascadeOnDelete();
             $table->string('no_telp')->nullable();
-            $table->string('name_tani');
-            $table->string('location');
+            $table->string('nama_tani');
+            $table->string('lokasi');
             $table->text('bio')->nullable();
             $table->decimal('rating_avg', 3, 2)->default(0.00);
             $table->timestamps();
