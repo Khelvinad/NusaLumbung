@@ -117,6 +117,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             @foreach($produk as $item)
                 <x-product-card
+                    :id="$item->id"
                     :gambar="$item->photo_path ?? ''"
                     :kategori="ucfirst($item->category)"
                     :nama="$item->name"
