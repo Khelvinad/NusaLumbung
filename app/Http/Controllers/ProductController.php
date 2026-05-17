@@ -15,13 +15,6 @@ class ProductController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct()
-    {
-        $this->authorizeResource(Product::class, 'product', [
-            'except' => ['index', 'show'],
-        ]);
-    }
-
     public function index(Request $request): AnonymousResourceCollection
     {
         $products = Product::query()
@@ -43,6 +36,8 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request): JsonResponse
     {
+        $this->authorize('create', Product::class);
+
         $data = $request->safe()->except('photo');
         $data['user_id'] = $request->user()->id;
         $data['photo_path'] = $request->file('photo')->store('products', 'public');
@@ -56,6 +51,8 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): ProductResource
     {
+        $this->authorize('update', $product);
+
         $data = $request->safe()->except('photo');
 
         if ($request->hasFile('photo')) {
@@ -70,9 +67,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product): JsonResponse
     {
+        $this->authorize('delete', $product);
+
         $product->deletePhoto();
         $product->delete();
 
         return response()->json(null, 204);
     }
 }
+
