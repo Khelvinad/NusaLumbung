@@ -15,12 +15,45 @@
         {{-- Profile Info --}}
         <div class="bg-white border border-gray-100 shadow-sm rounded-xl p-6 md:p-8">
             <h2 class="text-lg font-bold text-[#1A1C19] mb-1">Informasi Profil</h2>
-            <p class="text-sm text-[#1A1C19]/50 mb-6">Perbarui informasi nama dan email akun Anda.</p>
+            <p class="text-sm text-[#1A1C19]/50 mb-6">Perbarui informasi nama, email, dan foto profil Anda.</p>
             
-            <form method="post" action="{{ route('profile.update') }}" class="space-y-5">
+            <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('patch')
 
+                {{-- Foto Profil Section --}}
+                <div class="pb-6 border-b border-gray-100">
+                    <h3 class="text-md font-semibold text-[#1A1C19] mb-4">Foto Profil</h3>
+                    <div class="flex gap-6 items-start">
+                        {{-- Current Photo --}}
+                        <div class="flex-shrink-0">
+                            @if($user->photo_path)
+                                <img src="{{ Storage::url($user->photo_path) }}" alt="{{ $user->name }}" class="w-28 h-28 rounded-xl object-cover border border-gray-200">
+                            @else
+                                <div class="w-28 h-28 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#7FB069] flex items-center justify-center text-white border border-gray-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Upload Section --}}
+                        <div class="flex-1">
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#2D5A27] transition cursor-pointer" onclick="document.getElementById('photo-input').click()">
+                                <input type="file" id="photo-input" name="photo" accept="image/*" class="hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                <p class="text-sm font-semibold text-[#1A1C19]">Klik untuk memilih foto atau seret dan letakkan</p>
+                                <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF - Maksimal 2MB</p>
+                            </div>
+                            @error('photo') <p class="text-xs text-red-500 mt-2">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Form Fields --}}
                 <div>
                     <label for="name" class="block text-sm font-semibold text-[#1A1C19] mb-1">Nama</label>
                     <input id="name" name="name" type="text" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" />
@@ -47,7 +80,7 @@
 
                 @if($user->hasRole('petani'))
                     <hr class="border-gray-100 my-6">
-                    <h3 class="text-md font-bold text-[#1A1C19] mb-2">Profil Lahan & Usaha Tani</h3>
+                    <h3 class="text-md font-bold text-[#1A1C19] mb-4">Profil Lahan & Usaha Tani</h3>
                     
                     <div>
                         <label for="farm_name" class="block text-sm font-semibold text-[#1A1C19] mb-1">Nama Lahan / Kelompok Tani</label>
@@ -139,4 +172,58 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('photo-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // Find the photo display element and update it
+            const photoImg = document.querySelector('img[alt="{{ $user->name }}"]');
+            if (photoImg) {
+                photoImg.src = event.target.result;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Drag and drop support
+const dropZone = document.querySelector('[onclick*="photo-input"]');
+if (dropZone) {
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+            dropZone.classList.add('border-[#2D5A27]', 'bg-[#2D5A27]/5');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+            dropZone.classList.remove('border-[#2D5A27]', 'bg-[#2D5A27]/5');
+        }, false);
+    });
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        document.getElementById('photo-input').files = files;
+        
+        // Trigger change event
+        const event = new Event('change', { bubbles: true });
+        document.getElementById('photo-input').dispatchEvent(event);
+    }
+}
+</script>
 @endsection

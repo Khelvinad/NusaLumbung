@@ -33,6 +33,15 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($user->photo_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo_path);
+            }
+            $user->photo_path = $request->file('photo')->store('profile-photos', 'public');
+        }
+
         $user->save();
 
         if ($user->hasRole('petani') && $user->petaniProfile) {
