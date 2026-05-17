@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\OrderReceived;
+use App\Notifications\OrderStatusChanged;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -73,7 +75,11 @@ class OrderService
                 }
 
                 $order->update(['total_amount' => $total]);
-                $orders[] = $order->load(['items.product', 'pembeli', 'petani']);
+                $order->load(['items.product', 'pembeli', 'petani']);
+                $orders[] = $order;
+
+                // Notify petani about new order
+                $order->petani->notify(new OrderReceived($order));
             }
 
             return $orders;
@@ -98,8 +104,12 @@ class OrderService
             }
 
             $order->update(['status' => OrderStatus::Confirmed]);
+            $order = $order->fresh(['items.product', 'pembeli', 'petani']);
 
-            return $order->fresh(['items.product', 'pembeli', 'petani']);
+            // Notify pembeli about status change
+            $order->pembeli->notify(new OrderStatusChanged($order, OrderStatus::Confirmed));
+
+            return $order;
         });
     }
 
@@ -116,8 +126,12 @@ class OrderService
             }
 
             $order->update(['status' => $newStatus]);
+            $order = $order->fresh(['items.product', 'pembeli', 'petani']);
 
-            return $order->fresh(['items.product', 'pembeli', 'petani']);
+            // Notify pembeli about status change
+            $order->pembeli->notify(new OrderStatusChanged($order, $newStatus));
+
+            return $order;
         });
     }
 
