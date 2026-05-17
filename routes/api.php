@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommodityPriceController;
+use App\Http\Controllers\HarvestPoolController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,9 @@ Route::get('/commodity-prices/{slug}', [CommodityPriceController::class, 'show']
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/harvest-pools', [HarvestPoolController::class, 'index'])->name('harvest-pools.index');
+Route::get('/harvest-pools/{harvestPool}', [HarvestPoolController::class, 'show'])->name('harvest-pools.show');
 
 Route::middleware('auth')->group(function () {
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
@@ -22,4 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+
+    Route::post('/harvest-pools', [HarvestPoolController::class, 'store'])->name('harvest-pools.store');
+    Route::post('/harvest-pools/{harvestPool}/join', [HarvestPoolController::class, 'join'])->name('harvest-pools.join');
 });
