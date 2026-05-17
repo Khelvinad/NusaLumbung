@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\CommodityPriceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/commodity-prices', [CommodityPriceController::class, 'index'])->name('commodity-prices.index');
+Route::get('/commodity-prices/{slug}', [CommodityPriceController::class, 'show'])->name('commodity-prices.show');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
