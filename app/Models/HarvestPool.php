@@ -43,6 +43,6 @@ class HarvestPool extends Model
     public function isJoinable(): bool
     {
         return $this->status === HarvestPoolStatus::Open
-            && $this->deadline->isFuture();
+            && $this->deadline->endOfDay()->isFuture();
     }
 }

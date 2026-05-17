@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('petani_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->integer('rating'); 
-            $table->text('komentar')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

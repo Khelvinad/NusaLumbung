@@ -19,8 +19,8 @@ class HarvestPoolResource extends JsonResource
             'unit' => $this->unit,
             'target_qty' => $this->target_qty,
             'current_qty' => $this->current_qty,
-            'progress_percent' => $this->target_qty > 0
-                ? round(($this->current_qty / $this->target_qty) * 100, 2)
+            'progress_percent' => (float) $this->target_qty > 0
+                ? round(((float) $this->current_qty / (float) $this->target_qty) * 100, 2)
                 : 0,
             'status' => $this->status->value,
             'deadline' => $this->deadline->toDateString(),
