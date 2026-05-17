@@ -42,6 +42,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Product::class);
     }
 
+    public function ordersAsPembeli(): HasMany
+    {
+        return $this->hasMany(Order::class, 'pembeli_id');
+    }
+
+    public function ordersAsPetani(): HasMany
+    {
+        return $this->hasMany(Order::class, 'petani_id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
