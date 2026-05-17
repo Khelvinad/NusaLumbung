@@ -47,7 +47,7 @@ class OrderPolicy
             OrderStatus::Done => $this->isPembeli($user, $order)
                 && $order->status === OrderStatus::Shipped,
             OrderStatus::Cancelled => ($this->isPembeli($user, $order) && $order->status === OrderStatus::Pending)
-                || ($this->isRelatedPetani($user, $order) && in_array($order->status, [OrderStatus::Pending, OrderStatus::Confirmed])),
+                || ($this->isRelatedPetani($user, $order) && $order->status === OrderStatus::Confirmed),
             default => false,
         };
     }

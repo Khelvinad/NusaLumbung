@@ -75,7 +75,7 @@
                             </form>
                         @elseif(($order->status->value ?? $order->status) === 'done')
                             @if($order->reviews->isEmpty())
-                                <div class="mt-4 p-4 border border-gray-100 rounded-xl bg-[#F9FBF9]">
+                                <div class="mt-4 p-4 border border-gray-100 rounded-xl bg-[#F9FBF9] w-full">
                                     <h4 class="text-sm font-bold text-[#1A1C19] mb-2">Beri Penilaian</h4>
                                     <form action="{{ route('pembeli.reviews.store', $order) }}" method="POST" class="space-y-3">
                                         @csrf
@@ -96,7 +96,7 @@
                                     </form>
                                 </div>
                             @else
-                                <div class="mt-4 p-3 border border-gray-100 rounded-xl bg-gray-50 flex flex-col gap-1">
+                                <div class="mt-4 p-3 border border-gray-100 rounded-xl bg-gray-50 flex flex-col gap-1 w-full text-left">
                                     <p class="text-xs text-[#1A1C19]/50 font-semibold">Penilaian Anda:</p>
                                     <p class="text-sm">
                                         {{ str_repeat('⭐', $order->reviews->first()->rating) }}
