@@ -13,6 +13,14 @@ class StoreProductRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => strip_tags($this->name ?? ''),
+            'description' => strip_tags($this->description ?? ''),
+        ]);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -20,7 +28,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'category' => ['required', 'string', Rule::in(Product::CATEGORIES)],

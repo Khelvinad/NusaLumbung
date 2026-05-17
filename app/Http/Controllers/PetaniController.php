@@ -60,9 +60,14 @@ class PetaniController extends Controller
 
     public function produkStore(Request $request)
     {
+        $request->merge([
+            'name' => strip_tags($request->name ?? ''),
+            'description' => strip_tags($request->description ?? ''),
+        ]);
+
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:5000',
             'price'       => 'required|numeric|min:0',
             'stock'       => 'required|integer|min:0',
             'category'    => 'required|in:' . implode(',', Product::CATEGORIES),
@@ -93,9 +98,14 @@ class PetaniController extends Controller
     {
         abort_if($product->user_id !== Auth::id(), 403);
 
+        $request->merge([
+            'name' => strip_tags($request->name ?? ''),
+            'description' => strip_tags($request->description ?? ''),
+        ]);
+
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:5000',
             'price'       => 'required|numeric|min:0',
             'stock'       => 'required|integer|min:0',
             'category'    => 'required|in:' . implode(',', Product::CATEGORIES),
