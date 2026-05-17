@@ -17,6 +17,8 @@ Route::get('/register', function () {
 use App\Http\Controllers\MarketplaceController;
 
 Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');
+Route::get('/produk/{product}', [MarketplaceController::class, 'show'])->name('produk.show');
+Route::get('/petani/{user}', [MarketplaceController::class, 'petani'])->name('petani.show');
 
 Route::get('/keranjang', function () {
     return view('keranjang');

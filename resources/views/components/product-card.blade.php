@@ -1,4 +1,5 @@
 @props([
+    'id' => null,
     'gambar' => '',
     'kategori' => '',
     'nama' => '',
@@ -11,16 +12,22 @@
 
 <div class="produk-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition" 
     data-kategori="{{ $dataKategori }}">
-    <div class="relative h-48 overflow-hidden">
-        <img src="{{ $gambar ? asset('storage/' . $gambar) : asset('images/placeholder.jpg') }}" 
-            alt="{{ $nama }}" 
-            class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-        <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-            {{ $kategori }}
-        </span>
-    </div>
-    <div class="p-4">
-        <h3 class="font-bold text-[#1A1C19] mb-1">{{ $nama }}</h3>
+    @if($id)
+<a href="{{ route('produk.show', $id) }}">
+@endif
+<div class="relative h-48 overflow-hidden">
+    <img src="{{ $gambar ? asset('storage/' . $gambar) : asset('images/placeholder.jpg') }}"
+        alt="{{ $nama }}"
+        class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+    <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+        {{ $kategori }}
+    </span>
+</div>
+@if($id)
+</a>
+@endif
+<div class="p-4">
+    <h3 class="font-bold text-[#1A1C19] mb-1">{{ $nama }}</h3>
         <p class="text-xs text-[#1A1C19]/50 mb-3">{{ $asal }}</p>
         <div class="flex items-center justify-between mb-3">
             <p class="text-[#F2A65A] font-bold font-mono">

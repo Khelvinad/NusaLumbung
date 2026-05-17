@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MarketplaceController extends Controller
@@ -52,5 +53,35 @@ class MarketplaceController extends Controller
         ];
 
         return view('produk', compact('produk', 'kategoris', 'ticker'));
+    }
+
+    public function show(Product $product)
+    {
+        $product->load('user.petaniProfile');
+
+        $produkLain = Product::where('user_id', $product->user_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $produkSerupa = Product::where('category', $product->category)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('produk-detail', compact('product', 'produkLain', 'produkSerupa'));
+    }
+
+    public function petani(User $user)
+    {
+        $user->load('petaniProfile');
+
+        $produk = Product::where('user_id', $user->id)
+            ->latest()
+            ->paginate(12);
+
+        return view('petani-publik', compact('user', 'produk'));
     }
 }
