@@ -13,8 +13,21 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 
 Route::get('/', [MarketplaceController::class, 'index'])->name('home');
-Route::get('/produk/{product}', [ProductController::class, 'show'])->name('products.show');
+
+// Marketplace
+Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');
+Route::get('/produk/{product}', [MarketplaceController::class, 'show'])->name('produk.show');
+Route::get('/petani/{user}', [MarketplaceController::class, 'petani'])->name('petani.show');
+
 Route::get('/komoditas', [CommodityPriceController::class, 'index'])->name('commodity.index');
+
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if ($user->hasRole('petani')) {
+        return redirect()->route('petani.dashboard');
+    }
+    return redirect()->route('home');
+})->middleware('auth')->name('dashboard');
 
 Route::middleware(['auth', 'role:petani'])
     ->prefix('petani')

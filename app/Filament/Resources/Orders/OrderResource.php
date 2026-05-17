@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Orders;
 
-use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\Orders\Pages;
 use App\Models\Order;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -40,7 +40,7 @@ class OrderResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
                         'confirmed' => 'info',
                         'shipped' => 'primary',
