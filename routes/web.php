@@ -11,7 +11,7 @@ use App\Http\Controllers\PetaniController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 
-Route::get('/', [ProductController::class, 'index'])->name('home');
+Route::get('/', [MarketplaceController::class, 'index'])->name('home');
 
 // Marketplace
 Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');
