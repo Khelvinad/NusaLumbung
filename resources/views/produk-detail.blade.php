@@ -95,10 +95,10 @@
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-[#1A1C19]/50 mb-0.5">Dijual oleh</p>
                     <p class="font-bold text-[#1A1C19] truncate">
-                        {{ $product->user->petaniProfile->nama_tani ?? $product->user->name }}
+                        {{ $product->user->petaniProfile->farm_name ?? $product->user->name }}
                     </p>
                     @if($product->user->petaniProfile)
-                        <p class="text-xs text-[#1A1C19]/50 truncate">📍 {{ $product->user->petaniProfile->lokasi }}</p>
+                        <p class="text-xs text-[#1A1C19]/50 truncate">📍 {{ $product->user->petaniProfile->location }}</p>
                     @endif
                 </div>
                 <span class="text-[#2D5A27] text-sm font-semibold group-hover:translate-x-1 transition-transform">→</span>
@@ -125,7 +125,7 @@
                 :gambar="$item->photo_path ?? ''"
                 :kategori="ucfirst($item->category)"
                 :nama="$item->name"
-                :asal="$item->user->petaniProfile->nama_tani ?? $item->user->name ?? 'Petani Nusa Lumbung'"
+                :asal="$item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung'"
                 :harga="(int) $item->price"
                 satuan="kg"
                 :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
@@ -147,7 +147,7 @@
                 :gambar="$item->photo_path ?? ''"
                 :kategori="ucfirst($item->category)"
                 :nama="$item->name"
-                :asal="$item->user->petaniProfile->nama_tani ?? $item->user->name ?? 'Petani Nusa Lumbung'"
+                :asal="$item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung'"
                 :harga="(int) $item->price"
                 satuan="kg"
                 :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"

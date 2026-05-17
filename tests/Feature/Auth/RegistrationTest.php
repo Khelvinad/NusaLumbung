@@ -36,7 +36,7 @@ test('new users can register as petani and profile is created', function () {
     $this->assertDatabaseHas('petani_profiles', [
         'user_id' => $user->id,
         'no_telp' => '081234567890',
-        'nama_tani' => 'Test Petani Farm',
+        'farm_name' => 'Test Petani Farm',
     ]);
 });
 

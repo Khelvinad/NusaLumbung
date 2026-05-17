@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Orders;
 
-use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\Orders\Pages;
 use App\Models\Order;
 use BackedEnum;
 use Filament\Resources\Resource;

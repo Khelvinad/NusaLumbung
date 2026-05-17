@@ -20,6 +20,14 @@ Route::get('/petani/{user}', [MarketplaceController::class, 'petani'])->name('pe
 
 Route::get('/komoditas', [CommodityPriceController::class, 'index'])->name('commodity.index');
 
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if ($user->hasRole('petani')) {
+        return redirect()->route('petani.dashboard');
+    }
+    return redirect()->route('home');
+})->middleware('auth')->name('dashboard');
+
 Route::middleware(['auth', 'role:petani'])
     ->prefix('petani')
     ->name('petani.')

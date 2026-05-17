@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($user->petaniProfile->nama_tani ?? $user->name) . ' - Nusa Lumbung')
+@section('title', ($user->petaniProfile->farm_name ?? $user->name) . ' - Nusa Lumbung')
 
 @section('content')
 
@@ -16,10 +16,10 @@
         {{-- Info --}}
         <div class="text-center md:text-left">
             <h1 class="text-3xl font-extrabold text-white mb-1">
-                {{ $user->petaniProfile->nama_tani ?? $user->name }}
+                {{ $user->petaniProfile->farm_name ?? $user->name }}
             </h1>
             @if($user->petaniProfile)
-                <p class="text-white/70 text-sm mb-2">📍 {{ $user->petaniProfile->lokasi }}</p>
+                <p class="text-white/70 text-sm mb-2">📍 {{ $user->petaniProfile->location }}</p>
                 @if($user->petaniProfile->bio)
                     <p class="text-white/60 text-sm max-w-xl">{{ $user->petaniProfile->bio }}</p>
                 @endif
@@ -61,7 +61,7 @@
                     :gambar="$item->photo_path ?? ''"
                     :kategori="ucfirst($item->category)"
                     :nama="$item->name"
-                    :asal="$user->petaniProfile->nama_tani ?? $user->name"
+                    :asal="$user->petaniProfile->farm_name ?? $user->name"
                     :harga="(int) $item->price"
                     satuan="kg"
                     :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"

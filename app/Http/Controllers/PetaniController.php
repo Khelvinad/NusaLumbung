@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class PetaniController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth']);
-        $this->middleware(function ($request, $next) {
-            if (!Auth::user()->hasRole('petani')) {
-                abort(403, 'Akses hanya untuk petani.');
-            }
-            return $next($request);
-        });
-    }
 
     public function dashboard()
     {

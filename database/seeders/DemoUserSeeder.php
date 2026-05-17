@@ -38,8 +38,8 @@ class DemoUserSeeder extends Seeder
     ['user_id' => $petani->id],
     [
         'no_telp' => '081234567801',
-        'nama_tani' => 'Kebun Siti Rahayu',
-        'lokasi' => 'Wonosobo, Jawa Tengah',
+        'farm_name' => 'Kebun Siti Rahayu',
+        'location' => 'Wonosobo, Jawa Tengah',
         'bio' => 'Petani padi organik dengan pengalaman 12 tahun. Fokus pada beras merah dan gabah berkualitas.',
         'rating_avg' => 4.75,
     ],

@@ -121,7 +121,7 @@
                     :gambar="$item->photo_path ?? ''"
                     :kategori="ucfirst($item->category)"
                     :nama="$item->name"
-                    :asal="($item->user->petaniProfile->name_tani ?? $item->user->name ?? 'Petani Nusa Lumbung') . ($item->user->petaniProfile->location ? ' · ' . $item->user->petaniProfile->location : '')"
+                    :asal="($item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung') . ($item->user->petaniProfile->location ? ' · ' . $item->user->petaniProfile->location : '')"
                     :harga="(int) $item->price"
                     :satuan="'kg'"
                     :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
