@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\ProductResource\Pages;
+use App\Filament\Resources\Products\Pages;
 use App\Models\Product;
 use BackedEnum;
 use Filament\Resources\Resource;
