@@ -10,16 +10,23 @@ class MarketplaceController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
+            'kategori' => ['nullable', 'string', 'in:semua,beras,sayur,buah,kopi,rempah'],
+            'sort' => ['nullable', 'string', 'in:terbaru,termurah,termahal,stok'],
+        ]);
+
         $query = Product::query()->with('user.petaniProfile');
 
-        // Search
+        // Search — parameterized LIKE query, strip_tags untuk sanitasi XSS
         if ($request->filled('q')) {
-            $query->where('name', 'like', '%' . $request->q . '%');
+            $search = str_replace(['%', '_'], ['\%', '\_'], strip_tags($request->string('q')));
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         // Filter kategori
         if ($request->filled('kategori') && $request->kategori !== 'semua') {
-            $query->where('category', $request->kategori);
+            $query->where('category', $request->string('kategori'));
         }
 
         // Sort
@@ -31,6 +38,7 @@ class MarketplaceController extends Controller
         };
 
         $produk = $query->paginate(12)->withQueryString();
+
 
         $kategoris = [
             'semua'  => 'Semua',

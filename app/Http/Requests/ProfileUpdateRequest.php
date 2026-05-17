@@ -14,6 +14,13 @@ class ProfileUpdateRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => strip_tags($this->name ?? ''),
+        ]);
+    }
+
     public function rules(): array
     {
         return [

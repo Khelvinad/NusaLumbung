@@ -32,10 +32,14 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->merge([
+            'name' => strip_tags($request->name ?? ''),
+        ]);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:15'], 
+            'phone' => ['required', 'string', 'max:15'],
             'role' => ['required', 'string', 'in:petani,pembeli'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
