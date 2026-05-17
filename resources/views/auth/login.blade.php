@@ -31,7 +31,7 @@
 
             <h2 class="text-2xl font-bold text-[#1A1C19] mb-6">Masuk</h2>
 
-            <form action="#" method="POST" class="space-y-4">
+            <form action="{{ route('login') }}" method="POST" class="space-y-4">
                 @csrf
 
                 {{-- Email --}}
