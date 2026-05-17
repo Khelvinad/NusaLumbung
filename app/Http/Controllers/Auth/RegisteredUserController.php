@@ -52,13 +52,13 @@ class RegisteredUserController extends Controller
             PetaniProfile::create([
                 'user_id' => $user->id,
                 'no_telp' => $request->phone,
-                'nama_tani' => $request->name . ' Farm',
-                'lokasi' => 'Belum ditentukan',
+                'name_tani' => $request->name.' Farm',
+                'location' => 'Belum ditentukan',
             ]);
         } else {
             PembeliProfile::create([
                 'user_id' => $user->id,
-                'no_telp' => $request->phone,
+                'call_num' => $request->phone,
             ]);
         }
 

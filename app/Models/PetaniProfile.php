@@ -6,5 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class PetaniProfile extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',
+        'no_telp',
+        'name_tani',
+        'location',
+        'bio',
+        'rating_avg',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
