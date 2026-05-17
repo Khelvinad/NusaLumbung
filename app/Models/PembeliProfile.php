@@ -8,7 +8,7 @@ class PembeliProfile extends Model
 {
     protected $fillable = [
         'user_id',
-        'call_num',
+        'no_telp',
         'address',
     ];
 
