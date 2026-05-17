@@ -22,17 +22,17 @@
                 <div>
                     <h4 class="font-semibold mb-3 text-[#F2A65A]">Platform</h4>
                     <ul class="space-y-2 text-white/70">
-                        <li><a href="#" class="hover:text-white transition">Beranda</a></li>
-                        <li><a href="#" class="hover:text-white transition">Produk</a></li>
-                        <li><a href="#" class="hover:text-white transition">Fitur</a></li>
+                        <li><a href="/" class="hover:text-white transition">Beranda</a></li>
+                        <li><a href="{{ route('produk.index') }}" class="hover:text-white transition">Produk</a></li>
+                        <li><a href="/#fitur" class="hover:text-white transition">Fitur</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold mb-3 text-[#F2A65A]">Komunitas</h4>
                     <ul class="space-y-2 text-white/70">
-                        <li><a href="#" class="hover:text-white transition">Forum</a></li>
-                        <li><a href="#" class="hover:text-white transition">Kerja Sama</a></li>
-                        <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
+                        <li><a href="/#komunitas" class="hover:text-white transition">Forum</a></li>
+                        <li><a href="/#kerjasama" class="hover:text-white transition">Kerja Sama</a></li>
+                        <li><a href="/#tentang" class="hover:text-white transition">Tentang Kami</a></li>
                     </ul>
                 </div>
                 <div>

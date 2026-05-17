@@ -77,7 +77,7 @@
                         <span id="qty-display" class="px-5 py-3 text-sm font-semibold border-x-2 border-gray-200">1</span>
                         <button onclick="changeQty(1)" class="px-4 py-3 text-[#1A1C19] hover:bg-gray-100 transition font-bold">+</button>
                     </div>
-                    <button onclick="tambahKeKeranjang('{{ $product->name }}', {{ $product->price }})"
+                    <button onclick="tambahKeKeranjang({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }})"
                         class="flex-1 bg-[#2D5A27] text-white font-semibold py-3 rounded-xl hover:bg-[#7FB069] transition text-sm">
                         + Tambah ke Keranjang
                     </button>
@@ -95,10 +95,10 @@
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-[#1A1C19]/50 mb-0.5">Dijual oleh</p>
                     <p class="font-bold text-[#1A1C19] truncate">
-                        {{ $product->user->petaniProfile->nama_tani ?? $product->user->name }}
+                        {{ $product->user->petaniProfile->farm_name ?? $product->user->name }}
                     </p>
                     @if($product->user->petaniProfile)
-                        <p class="text-xs text-[#1A1C19]/50 truncate">📍 {{ $product->user->petaniProfile->lokasi }}</p>
+                        <p class="text-xs text-[#1A1C19]/50 truncate">📍 {{ $product->user->petaniProfile->location }}</p>
                     @endif
                 </div>
                 <span class="text-[#2D5A27] text-sm font-semibold group-hover:translate-x-1 transition-transform">→</span>
@@ -125,7 +125,7 @@
                 :gambar="$item->photo_path ?? ''"
                 :kategori="ucfirst($item->category)"
                 :nama="$item->name"
-                :asal="$item->user->petaniProfile->nama_tani ?? $item->user->name ?? 'Petani Nusa Lumbung'"
+                :asal="$item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung'"
                 :harga="(int) $item->price"
                 satuan="kg"
                 :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
@@ -147,7 +147,7 @@
                 :gambar="$item->photo_path ?? ''"
                 :kategori="ucfirst($item->category)"
                 :nama="$item->name"
-                :asal="$item->user->petaniProfile->nama_tani ?? $item->user->name ?? 'Petani Nusa Lumbung'"
+                :asal="$item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung'"
                 :harga="(int) $item->price"
                 satuan="kg"
                 :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
@@ -176,21 +176,28 @@
         badge.classList.toggle('hidden', total === 0);
     }
 
-    function tambahKeKeranjang(nama, harga) {
-        const existing = keranjang.find(item => item.nama === nama);
-        if (existing) {
-            existing.qty += qty;
-        } else {
-            keranjang.push({ nama, harga, qty });
-        }
-        localStorage.setItem('keranjang', JSON.stringify(keranjang));
-        updateBadge();
+    function tambahKeKeranjang(id, nama, harga) {
+        @guest
+            alert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.');
+            window.location.href = '{{ route("login") }}';
+            return;
+        @else
+            if (!id) return;
+            const existing = keranjang.find(item => item.id === id);
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                keranjang.push({ id, nama, harga, qty: qty });
+            }
+            localStorage.setItem('keranjang', JSON.stringify(keranjang));
+            updateBadge();
 
-        const notif = document.createElement('div');
-        notif.className = 'fixed bottom-6 right-6 bg-[#2D5A27] text-white text-sm px-5 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
-        notif.innerHTML = `<span>✓</span><span>${qty}x ${nama} ditambahkan ke keranjang</span>`;
-        document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 2500);
+            const notif = document.createElement('div');
+            notif.className = 'fixed bottom-6 right-6 bg-[#2D5A27] text-white text-sm px-5 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
+            notif.innerHTML = `<span>✓</span><span>${qty}x ${nama} ditambahkan ke keranjang</span>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2500);
+        @endguest
     }
 
     updateBadge();

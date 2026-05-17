@@ -56,20 +56,25 @@ class RegisteredUserController extends Controller
             PetaniProfile::create([
                 'user_id' => $user->id,
                 'no_telp' => $request->phone,
-                'name_tani' => $request->name.' Farm',
+                'farm_name' => $request->name.' Farm',
                 'location' => 'Belum ditentukan',
             ]);
         } else {
             PembeliProfile::create([
                 'user_id' => $user->id,
-                'call_num' => $request->phone,
+                'no_telp' => $request->phone,
             ]);
         }
+
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $redirectRoute = $request->role === 'petani'
+            ? route('petani.dashboard', absolute: false)
+            : route('home', absolute: false);
+
+        return redirect($redirectRoute);
     }
 }

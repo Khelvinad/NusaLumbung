@@ -1,0 +1,24 @@
+
+   Illuminate\View\ViewException 
+
+  Undefined variable $errors (View: /home/kaepi/Documents/nusalumbung/resources/views/profile/edit.blade.php)
+
+  at storage/framework/views/f6ff5df337d58aa11ea25a4f0eab1825.php:27
+     23▕                 <div>
+     24▕                     <label for="name" class="block text-sm font-semibold text-[#1A1C19] mb-1">Nama</label>
+     25▕                     <input id="name" name="name" type="text" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition" value="<?php echo e(old('name', $user->name)); ?>" required autofocus autocomplete="name" />
+     26▕                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['name'];
+  ➜  27▕ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+     28▕ if ($__bag->has($__errorArgs[0])) :
+     29▕ if (isset($message)) { $__messageOriginal = $message; }
+     30▕ $message = $__bag->first($__errorArgs[0]); ?> <p class="text-xs text-red-500 mt-1"><?php echo e($message); ?></p> <?php unset($message);
+     31▕ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+
+      [2m+2 vendor frames [22m
+
+  3   storage/framework/views/f6ff5df337d58aa11ea25a4f0eab1825.php:27
+      ErrorException::("Undefined variable $errors")
+
+  4   storage/framework/views/f6ff5df337d58aa11ea25a4f0eab1825.php:27
+      Illuminate\Foundation\Bootstrap\HandleExceptions::{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():257}()
+

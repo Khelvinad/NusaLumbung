@@ -19,14 +19,14 @@ class OrderController extends Controller
 
     public function __construct(private readonly OrderService $orderService) {}
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Order::class);
 
         $user = $request->user();
 
         $orders = Order::query()
-            ->with(['items.product', 'pembeli', 'petani'])
+            ->with(['items.product', 'pembeli', 'petani', 'reviews'])
             ->when(
                 $user->hasRole('pembeli'),
                 fn ($query) => $query->where('pembeli_id', $user->id),
@@ -38,14 +38,23 @@ class OrderController extends Controller
             ->latest()
             ->paginate(15);
 
-        return OrderResource::collection($orders);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return OrderResource::collection($orders);
+        }
+
+        return view('pembeli.orders.index', compact('orders'));
     }
 
-    public function show(Order $order): OrderResource
+    public function show(Request $request, Order $order)
     {
         $this->authorize('view', $order);
 
-        return new OrderResource($order->load(['items.product', 'pembeli', 'petani']));
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return new OrderResource($order->load(['items.product', 'pembeli', 'petani']));
+        }
+
+        $order->load(['items.product', 'pembeli', 'petani']);
+        return view('pembeli.orders.show', compact('order'));
     }
 
     public function checkout(CheckoutOrderRequest $request): JsonResponse
@@ -62,16 +71,20 @@ class OrderController extends Controller
             ->setStatusCode(201);
     }
 
-    public function confirm(Order $order): OrderResource
+    public function confirm(Request $request, Order $order)
     {
         $this->authorize('confirm', $order);
 
         $order = $this->orderService->confirm($order);
 
-        return new OrderResource($order);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return new OrderResource($order);
+        }
+
+        return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi!');
     }
 
-    public function updateStatus(UpdateOrderStatusRequest $request, Order $order): OrderResource
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order)
     {
         $status = OrderStatus::from($request->validated('status'));
 
@@ -79,6 +92,10 @@ class OrderController extends Controller
 
         $order = $this->orderService->updateStatus($order, $status);
 
-        return new OrderResource($order);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return new OrderResource($order);
+        }
+
+        return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui!');
     }
 }

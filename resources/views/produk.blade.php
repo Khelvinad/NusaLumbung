@@ -121,7 +121,7 @@
                     :gambar="$item->photo_path ?? ''"
                     :kategori="ucfirst($item->category)"
                     :nama="$item->name"
-                    :asal="($item->user->petaniProfile->name_tani ?? $item->user->name ?? 'Petani Nusa Lumbung') . ($item->user->petaniProfile->location ? ' · ' . $item->user->petaniProfile->location : '')"
+                    :asal="($item->user->petaniProfile->farm_name ?? $item->user->name ?? 'Petani Nusa Lumbung') . ($item->user->petaniProfile->location ? ' · ' . $item->user->petaniProfile->location : '')"
                     :harga="(int) $item->price"
                     :satuan="'kg'"
                     :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
@@ -150,21 +150,28 @@
         badge.classList.toggle('hidden', total === 0);
     }
 
-    function tambahKeKeranjang(nama, harga) {
-        const existing = keranjang.find(item => item.nama === nama);
-        if (existing) {
-            existing.qty += 1;
-        } else {
-            keranjang.push({ nama, harga, qty: 1 });
-        }
-        localStorage.setItem('keranjang', JSON.stringify(keranjang));
-        updateBadge();
+    function tambahKeKeranjang(id, nama, harga) {
+        @guest
+            alert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.');
+            window.location.href = '{{ route("login") }}';
+            return;
+        @else
+            if (!id) return;
+            const existing = keranjang.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                keranjang.push({ id, nama, harga, qty: 1 });
+            }
+            localStorage.setItem('keranjang', JSON.stringify(keranjang));
+            updateBadge();
 
-        const notif = document.createElement('div');
-        notif.className = 'fixed bottom-6 right-6 bg-[#2D5A27] text-white text-sm px-5 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
-        notif.innerHTML = `<span>✓</span><span>${nama} ditambahkan ke keranjang</span>`;
-        document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 2500);
+            const notif = document.createElement('div');
+            notif.className = 'fixed bottom-6 right-6 bg-[#2D5A27] text-white text-sm px-5 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
+            notif.innerHTML = `<span>✓</span><span>${nama} ditambahkan ke keranjang</span>`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2500);
+        @endguest
     }
 
     updateBadge();

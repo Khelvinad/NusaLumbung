@@ -36,7 +36,7 @@
             </p>
             <x-order-status-badge :status="$stok" />
         </div>
-        <button onclick="tambahKeKeranjang('{{ $nama }}', {{ $harga }})" 
+        <button onclick="tambahKeKeranjang({{ $id ?? 'null' }}, '{{ addslashes($nama) }}', {{ $harga }})" 
             class="w-full bg-[#2D5A27] text-white text-sm font-semibold py-2 rounded-lg hover:bg-[#7FB069] transition">
             + Keranjang
         </button>

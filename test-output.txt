@@ -1,0 +1,25 @@
+
+   Illuminate\View\ViewException 
+
+  Undefined variable $errors (View: /home/kaepi/Documents/nusalumbung/resources/views/profile/partials/update-profile-information-form.blade.php) (View: /home/kaepi/Documents/nusalumbung/resources/views/profile/partials/update-profile-information-form.blade.php)
+
+  at storage/framework/views/6984420ad49d774c0a3fce8ff1eef3ba.php:65
+     61▕ <?php unset($__componentOriginal18c21970322f9e5c938bc954620c12bb); ?>
+     62▕ <?php endif; ?>
+     63▕             <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
+     64▕ <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
+  ➜  65▕ <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['class' => 'mt-2','messages' => $errors->get('name')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+     66▕ <?php $component->withName('input-error'); ?>
+     67▕ <?php if ($component->shouldRender()): ?>
+     68▕ <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+     69▕ <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+
+      [2m+2 vendor frames [22m
+
+  3   storage/framework/views/6984420ad49d774c0a3fce8ff1eef3ba.php:65
+      Illuminate\View\ViewException::("Undefined variable $errors (View: /home/kaepi/Documents/nusalumbung/resources/views/profile/partials/update-profile-information-form.blade.php)")
+      [2m+2 vendor frames [22m
+
+  6   storage/framework/views/6984420ad49d774c0a3fce8ff1eef3ba.php:65
+      ErrorException::("Undefined variable $errors")
+
