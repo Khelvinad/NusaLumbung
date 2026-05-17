@@ -42,6 +42,33 @@ class OrderPolicy
         };
     }
 
+    public function review(User $user, Order $order): bool
+    {
+        return $this->isPembeli($user, $order)
+            && $order->status === OrderStatus::Done
+            && ! $order->reviews()->where('pembeli_id', $user->id)->exists();
+    }
+
+    public function update(User $user, Order $order): bool
+    {
+        return $this->isPembeli($user, $order);
+    }
+
+    public function delete(User $user, Order $order): bool
+    {
+        return $this->isPembeli($user, $order);
+    }
+
+    public function restore(User $user, Order $order): bool
+    {
+        return false;
+    }
+
+    public function forceDelete(User $user, Order $order): bool
+    {
+        return false;
+    }
+
     protected function isPembeli(User $user, Order $order): bool
     {
         return (int) $user->id === (int) $order->pembeli_id;

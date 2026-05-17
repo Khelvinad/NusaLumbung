@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CommodityPriceController;
 use App\Http\Controllers\HarvestPoolController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/commodity-prices', [CommodityPriceController::class, 'index'])->name('commodity-prices.index');
@@ -26,7 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::post('/orders/{order}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
     Route::post('/harvest-pools', [HarvestPoolController::class, 'store'])->name('harvest-pools.store');
     Route::post('/harvest-pools/{harvestPool}/join', [HarvestPoolController::class, 'join'])->name('harvest-pools.join');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 });
