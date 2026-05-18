@@ -69,12 +69,14 @@ class MarketplaceController extends Controller
 
         $produkLain = Product::where('user_id', $product->user_id)
             ->where('id', '!=', $product->id)
+            ->with('user.petaniProfile')
             ->latest()
             ->take(4)
             ->get();
 
         $produkSerupa = Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
+            ->with('user.petaniProfile')
             ->latest()
             ->take(4)
             ->get();

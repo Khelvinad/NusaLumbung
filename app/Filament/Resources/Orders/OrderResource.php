@@ -40,7 +40,7 @@ class OrderResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn (mixed $state): string => match ((string) ($state instanceof \BackedEnum ? $state->value : $state)) {
                         'pending' => 'warning',
                         'confirmed' => 'info',
                         'shipped' => 'primary',

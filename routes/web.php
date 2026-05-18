@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HarvestPoolController;
@@ -31,8 +30,6 @@ Route::middleware(['auth', 'role:petani'])
     ->group(function () {
 
         Route::get('/dashboard', [PetaniController::class, 'dashboard'])->name('dashboard');
-
-        Route::resource('products', ProductController::class)->except(['index', 'show']);
 
         Route::get('/produk', [PetaniController::class, 'produkIndex'])->name('produk.index');
         Route::get('/produk/create', [PetaniController::class, 'produkCreate'])->name('produk.create');

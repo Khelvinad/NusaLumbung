@@ -42,15 +42,15 @@
                             @foreach($order->items as $item)
                                 <div class="flex items-center gap-3 text-sm">
                                     <div class="w-10 h-10 bg-gray-50 rounded border border-gray-100 overflow-hidden shrink-0">
-                                        @if($item->product->photo_path)
+                                        @if($item->product?->photo_path)
                                             <img src="{{ asset('storage/' . $item->product->photo_path) }}" class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-lg">🌾</div>
                                         @endif
                                     </div>
                                     <div>
-                                        <p class="font-medium text-[#1A1C19]">{{ $item->product->name }}</p>
-                                        <p class="text-xs text-[#1A1C19]/50">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                                        <p class="font-medium text-[#1A1C19]">{{ $item->product->name ?? $item->product_name_snapshot }}</p>
+                                        <p class="text-xs text-[#1A1C19]/50">{{ $item->quantity }} x Rp {{ number_format($item->price_snapshot, 0, ',', '.') }}</p>
                                     </div>
                                 </div>
                             @endforeach
