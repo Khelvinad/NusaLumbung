@@ -2,46 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
-    /**
-     * List the authenticated user's notifications.
-     */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
-        $notifications = $request->user()
-            ->notifications()
-            ->latest()
-            ->paginate(15);
+        $notifications = $request->user()->unreadNotifications;
+        
+        if ($request->expectsJson() || $request->is('api/*') || $request->ajax()) {
+            return response()->json(['data' => $notifications]);
+        }
 
-        return response()->json($notifications);
+        return view('notifications.index', compact('notifications'));
     }
 
-    /**
-     * Mark a single notification as read.
-     */
-    public function markAsRead(Request $request, string $id): JsonResponse
+    public function markAsRead(Request $request, $id)
     {
-        $notification = $request->user()
-            ->notifications()
-            ->findOrFail($id);
-
+        $notification = $request->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return response()->json(['message' => 'Notifikasi ditandai sudah dibaca.']);
+        if ($request->expectsJson() || $request->is('api/*') || $request->ajax()) {
+            return response()->json(['message' => 'Notification marked as read']);
+        }
+
+        return redirect()->back();
     }
 
-    /**
-     * Mark all notifications as read.
-     */
-    public function markAllAsRead(Request $request): JsonResponse
+    public function markAllAsRead(Request $request)
     {
         $request->user()->unreadNotifications->markAsRead();
 
-        return response()->json(['message' => 'Semua notifikasi ditandai sudah dibaca.']);
+        if ($request->expectsJson() || $request->is('api/*') || $request->ajax()) {
+            return response()->json(['message' => 'All notifications marked as read']);
+        }
+
+        return redirect()->back();
     }
 }

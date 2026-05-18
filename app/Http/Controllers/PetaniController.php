@@ -45,7 +45,7 @@ class PetaniController extends Controller
     public function produkCreate()
     {
         $kategoris = Product::CATEGORIES;
-        return view('petani.produk.create', compact('kategoris'));
+        return view('petani.produk.form', compact('kategoris'));
     }
 
     public function produkStore(Request $request)
@@ -81,7 +81,7 @@ class PetaniController extends Controller
     {
         abort_if($product->user_id !== Auth::id(), 403);
         $kategoris = Product::CATEGORIES;
-        return view('petani.produk.edit', compact('product', 'kategoris'));
+        return view('petani.produk.form', compact('product', 'kategoris'));
     }
 
     public function produkUpdate(Request $request, Product $product)

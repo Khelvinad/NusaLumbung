@@ -66,10 +66,15 @@ class RegisteredUserController extends Controller
             ]);
         }
 
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $redirectRoute = $request->role === 'petani'
+            ? route('petani.dashboard', absolute: false)
+            : route('home', absolute: false);
+
+        return redirect($redirectRoute);
     }
 }

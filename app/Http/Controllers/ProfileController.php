@@ -26,13 +26,27 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->only('name', 'email', 'phone', 'address'));
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($user->photo_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo_path);
+            }
+            $user->photo_path = $request->file('photo')->store('profile-photos', 'public');
+        }
+
+        $user->save();
+
+        if ($user->hasRole('petani') && $user->petaniProfile) {
+            $user->petaniProfile->update($request->only('farm_name', 'location', 'bio'));
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

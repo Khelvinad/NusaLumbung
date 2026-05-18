@@ -16,13 +16,6 @@ class Review extends Model
         'comment',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'rating' => 'integer',
-        ];
-    }
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

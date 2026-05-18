@@ -19,7 +19,7 @@ class ReviewController extends Controller
     /**
      * Submit a review for an order.
      */
-    public function store(StoreReviewRequest $request, Order $order): JsonResponse
+    public function store(StoreReviewRequest $request, Order $order)
     {
         $this->authorize('create', [Review::class, $order]);
 
@@ -29,8 +29,12 @@ class ReviewController extends Controller
             $request->validated(),
         );
 
-        return (new ReviewResource($review->load(['pembeli', 'petani', 'product'])))
-            ->response()
-            ->setStatusCode(201);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return (new ReviewResource($review->load(['pembeli', 'petani', 'product'])))
+                ->response()
+                ->setStatusCode(201);
+        }
+
+        return redirect()->back()->with('success', 'Review berhasil ditambahkan!');
     }
 }

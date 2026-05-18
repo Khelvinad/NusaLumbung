@@ -166,12 +166,61 @@
         renderKeranjang();
     }
 
-    function checkout() {
+    async function checkout() {
         if (keranjang.length === 0) {
             alert('Keranjang masih kosong!');
             return;
         }
-        window.location.href = '/checkout';
+
+        const btn = document.querySelector('button[onclick="checkout()"]');
+        const originalText = btn.textContent;
+        btn.textContent = 'Memproses...';
+        btn.disabled = true;
+
+        const items = keranjang.map(item => ({
+            product_id: item.id,
+            quantity: item.qty
+        }));
+
+        try {
+            const response = await fetch('{{ route("pembeli.checkout") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({ items: items })
+            });
+
+            if (response.status === 401) {
+                alert('Silakan login terlebih dahulu untuk checkout.');
+                window.location.href = '{{ route("login") }}';
+                return;
+            }
+
+            if (response.status === 403) {
+                alert('Anda harus mendaftar sebagai Pembeli untuk melakukan checkout.');
+                btn.textContent = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            if (response.ok) {
+                localStorage.removeItem('keranjang');
+                window.location.href = '{{ route("pembeli.orders.index") }}';
+            } else {
+                const data = await response.json();
+                alert('Gagal checkout: ' + (data.message || 'Terjadi kesalahan pada sistem.'));
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Terjadi kesalahan jaringan.');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
     }
 
     renderKeranjang();

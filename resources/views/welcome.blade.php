@@ -720,7 +720,7 @@
                         Dashboard monitoring pesanan
                     </li>
                 </ul>
-                <a href="#" class="mt-auto w-full bg-[#2D5A27] text-white text-sm font-semibold py-3 rounded-lg hover:bg-[#7FB069] transition text-center">
+                <a href="{{ route('register') }}" class="mt-auto w-full bg-[#2D5A27] text-white text-sm font-semibold py-3 rounded-lg hover:bg-[#7FB069] transition text-center">
                     Daftar sebagai UMKM Mitra
                 </a>
             </div>
@@ -751,7 +751,7 @@
                         Rute pengiriman dioptimasi AI
                     </li>
                 </ul>
-                <a href="#" class="mt-auto w-full bg-[#F2A65A] text-white text-sm font-semibold py-3 rounded-lg hover:bg-[#2D5A27] transition text-center">
+                <a href="{{ route('register') }}" class="mt-auto w-full bg-[#F2A65A] text-white text-sm font-semibold py-3 rounded-lg hover:bg-[#2D5A27] transition text-center">
                     Daftar sebagai Mitra Kurir
                 </a>
             </div>

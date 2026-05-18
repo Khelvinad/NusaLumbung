@@ -10,8 +10,10 @@ use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
@@ -19,14 +21,15 @@ class OrderController extends Controller
 
     public function __construct(private readonly OrderService $orderService) {}
 
-    public function index(Request $request): AnonymousResourceCollection
+    /**
+     * List orders for pembeli — returns Blade view.
+     */
+    public function index(Request $request): View
     {
-        $this->authorize('viewAny', Order::class);
-
         $user = $request->user();
 
         $orders = Order::query()
-            ->with(['items.product', 'pembeli', 'petani'])
+            ->with(['items.product', 'pembeli', 'petani', 'reviews'])
             ->when(
                 $user->hasRole('pembeli'),
                 fn ($query) => $query->where('pembeli_id', $user->id),
@@ -38,16 +41,24 @@ class OrderController extends Controller
             ->latest()
             ->paginate(15);
 
-        return OrderResource::collection($orders);
+        return view('pembeli.orders.index', compact('orders'));
     }
 
-    public function show(Order $order): OrderResource
+    /**
+     * Show single order — returns Blade view.
+     */
+    public function show(Order $order): View
     {
         $this->authorize('view', $order);
 
-        return new OrderResource($order->load(['items.product', 'pembeli', 'petani']));
+        $order->load(['items.product', 'pembeli', 'petani', 'reviews']);
+
+        return view('pembeli.orders.show', compact('order'));
     }
 
+    /**
+     * Checkout — accepts JSON, returns JSON.
+     */
     public function checkout(CheckoutOrderRequest $request): JsonResponse
     {
         $this->authorize('create', Order::class);
@@ -62,23 +73,29 @@ class OrderController extends Controller
             ->setStatusCode(201);
     }
 
-    public function confirm(Order $order): OrderResource
+    /**
+     * Petani confirms a pending order.
+     */
+    public function confirm(Order $order): RedirectResponse
     {
         $this->authorize('confirm', $order);
 
-        $order = $this->orderService->confirm($order);
+        $this->orderService->confirm($order);
 
-        return new OrderResource($order);
+        return back()->with('success', 'Order #' . $order->id . ' berhasil dikonfirmasi.');
     }
 
-    public function updateStatus(UpdateOrderStatusRequest $request, Order $order): OrderResource
+    /**
+     * Update order status (shipped/done/cancelled).
+     */
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order): RedirectResponse
     {
         $status = OrderStatus::from($request->validated('status'));
 
         $this->authorize('updateStatus', [$order, $status]);
 
-        $order = $this->orderService->updateStatus($order, $status);
+        $this->orderService->updateStatus($order, $status);
 
-        return new OrderResource($order);
+        return back()->with('success', 'Status order #' . $order->id . ' berhasil diperbarui.');
     }
 }

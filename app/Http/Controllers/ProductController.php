@@ -40,7 +40,10 @@ class ProductController extends Controller
 
         $data = $request->safe()->except('photo');
         $data['user_id'] = $request->user()->id;
-        $data['photo_path'] = $request->file('photo')->store('products', 'public');
+
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('products', 'public');
+        }
 
         $product = Product::create($data);
 

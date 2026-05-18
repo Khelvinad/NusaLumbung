@@ -20,7 +20,7 @@ class HarvestPoolController extends Controller
     /**
      * List active pools (open & not past deadline).
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
         $this->authorize('viewAny', HarvestPool::class);
 
@@ -32,25 +32,36 @@ class HarvestPoolController extends Controller
             ->latest()
             ->paginate(15);
 
-        return HarvestPoolResource::collection($pools);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return HarvestPoolResource::collection($pools);
+        }
+
+        return view('petani.harvest-pools.index', compact('pools'));
     }
 
-    /**
-     * Show a single pool with members and progress.
-     */
-    public function show(HarvestPool $harvestPool): HarvestPoolResource
+    public function show(Request $request, HarvestPool $harvestPool)
     {
         $this->authorize('view', $harvestPool);
 
-        return new HarvestPoolResource(
-            $harvestPool->load(['creator', 'members.user'])
-        );
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return new HarvestPoolResource(
+                $harvestPool->load(['creator', 'members.user'])
+            );
+        }
+
+        return view('petani.harvest-pools.show', compact('harvestPool'));
+    }
+
+    public function create()
+    {
+        $this->authorize('create', HarvestPool::class);
+        return view('petani.harvest-pools.create');
     }
 
     /**
      * Create a new harvest pool.
      */
-    public function store(StoreHarvestPoolRequest $request): JsonResponse
+    public function store(StoreHarvestPoolRequest $request)
     {
         $this->authorize('create', HarvestPool::class);
 
@@ -59,15 +70,19 @@ class HarvestPoolController extends Controller
             'created_by' => $request->user()->id,
         ]);
 
-        return (new HarvestPoolResource($pool->load('creator')))
-            ->response()
-            ->setStatusCode(201);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return (new HarvestPoolResource($pool->load('creator')))
+                ->response()
+                ->setStatusCode(201);
+        }
+
+        return redirect()->route('petani.harvest-pools.index')->with('success', 'Pooling panen berhasil dibuat!');
     }
 
     /**
      * Join a pool with a qty contribution.
      */
-    public function join(JoinHarvestPoolRequest $request, HarvestPool $harvestPool): JsonResponse
+    public function join(JoinHarvestPoolRequest $request, HarvestPool $harvestPool)
     {
         $this->authorize('join', $harvestPool);
 
@@ -100,8 +115,12 @@ class HarvestPoolController extends Controller
             return $pool;
         });
 
-        return (new HarvestPoolResource($pool->load(['creator', 'members.user'])))
-            ->response()
-            ->setStatusCode(201);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return (new HarvestPoolResource($pool->load(['creator', 'members.user'])))
+                ->response()
+                ->setStatusCode(201);
+        }
+
+        return redirect()->route('petani.harvest-pools.show', $harvestPool)->with('success', 'Berhasil bergabung dengan pooling panen!');
     }
 }

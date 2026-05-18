@@ -80,4 +80,3 @@ class OrderPolicy
             && (int) $user->id === (int) $order->petani_id;
     }
 }
-

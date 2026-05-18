@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ReviewResource extends JsonResource
 {
     /**
+     * Transform the resource into an array.
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -16,19 +18,20 @@ class ReviewResource extends JsonResource
             'id' => $this->id,
             'rating' => $this->rating,
             'comment' => $this->comment,
-            'pembeli' => $this->whenLoaded('pembeli', fn () => [
-                'id' => $this->pembeli->id,
-                'name' => $this->pembeli->name,
-            ]),
-            'petani' => $this->whenLoaded('petani', fn () => [
-                'id' => $this->petani->id,
-                'name' => $this->petani->name,
-            ]),
-            'product' => $this->whenLoaded('product', fn () => [
-                'id' => $this->product->id,
-                'name' => $this->product->name,
-            ]),
+            'pembeli' => [
+                'id' => $this->pembeli_id,
+                'name' => $this->whenLoaded('pembeli', fn () => $this->pembeli->name),
+            ],
+            'petani' => [
+                'id' => $this->petani_id,
+                'name' => $this->whenLoaded('petani', fn () => $this->petani->name),
+            ],
+            'product' => [
+                'id' => $this->product_id,
+                'name' => $this->whenLoaded('product', fn () => $this->product->name),
+            ],
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
