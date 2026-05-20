@@ -12,6 +12,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.nusaAlert = function(msg, icon = 'info') {
+            return Swal.fire({
+                text: msg,
+                icon: icon,
+                confirmButtonColor: '#2D5A27'
+            });
+        };
+        window.nusaConfirmForm = function(event, msg) {
+            event.preventDefault();
+            const form = event.target;
+            Swal.fire({
+                text: msg,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#D32F2F',
+                cancelButtonColor: '#a1a1aa',
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        };
+    </script>
 </head>
 <body class="bg-[#F9FBF9] text-[#1A1C19] font-sans">
 

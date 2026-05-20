@@ -26,11 +26,17 @@
                     <h3 class="text-md font-semibold text-[#1A1C19] mb-4">Foto Profil</h3>
                     <div class="flex gap-6 items-start">
                         {{-- Current Photo --}}
-                        <div class="flex-shrink-0">
+                        <div class="flex-shrink-0" id="photo-preview-container">
                             @if($user->photo_path)
-                                <img src="{{ Storage::url($user->photo_path) }}" alt="{{ $user->name }}" class="w-28 h-28 rounded-xl object-cover border border-gray-200">
+                                <img src="{{ Storage::url($user->photo_path) }}" alt="{{ $user->name }}" class="w-28 h-28 rounded-xl object-cover border border-gray-200" id="photo-preview-image">
+                                <div id="photo-preview-placeholder" class="hidden w-28 h-28 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#7FB069] flex items-center justify-center text-white border border-gray-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
                             @else
-                                <div class="w-28 h-28 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#7FB069] flex items-center justify-center text-white border border-gray-200">
+                                <img src="" alt="{{ $user->name }}" class="hidden w-28 h-28 rounded-xl object-cover border border-gray-200" id="photo-preview-image">
+                                <div id="photo-preview-placeholder" class="w-28 h-28 rounded-xl bg-gradient-to-br from-[#2D5A27] to-[#7FB069] flex items-center justify-center text-white border border-gray-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
@@ -155,7 +161,7 @@
             <h2 class="text-lg font-bold text-red-600 mb-1">Hapus Akun</h2>
             <p class="text-sm text-red-500/80 mb-6">Sekali akun dihapus, semua data dan riwayat pesanan akan terhapus secara permanen.</p>
             
-            <form method="post" action="{{ route('profile.destroy') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak bisa dibatalkan.')">
+            <form method="post" action="{{ route('profile.destroy') }}" onsubmit="nusaConfirmForm(event, 'Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak bisa dibatalkan.')">
                 @csrf
                 @method('delete')
                 
@@ -180,9 +186,15 @@ document.getElementById('photo-input').addEventListener('change', function(e) {
         const reader = new FileReader();
         reader.onload = function(event) {
             // Find the photo display element and update it
-            const photoImg = document.querySelector('img[alt="{{ $user->name }}"]');
+            const photoImg = document.getElementById('photo-preview-image');
+            const placeholder = document.getElementById('photo-preview-placeholder');
+            
             if (photoImg) {
                 photoImg.src = event.target.result;
+                photoImg.classList.remove('hidden');
+            }
+            if (placeholder) {
+                placeholder.classList.add('hidden');
             }
         };
         reader.readAsDataURL(file);

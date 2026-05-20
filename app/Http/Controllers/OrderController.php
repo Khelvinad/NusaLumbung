@@ -63,6 +63,13 @@ class OrderController extends Controller
     {
         $this->authorize('create', Order::class);
 
+        $user = $request->user();
+        if (empty($user->address) || empty($user->phone)) {
+            return response()->json([
+                'message' => 'Silakan lengkapi profil Anda (Alamat dan No HP) sebelum melakukan checkout.'
+            ], 422);
+        }
+
         $orders = $this->orderService->checkout(
             $request->user(),
             $request->validated('items'),

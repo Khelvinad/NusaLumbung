@@ -24,11 +24,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
 
-        $request->session()->regenerate();
+            $request->session()->regenerate();
 
-        return redirect()->intended(route('home', absolute: false));
+            return redirect()->intended(route('home', absolute: false));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'email' => 'Terjadi kesalahan pada sistem saat login. Silakan coba beberapa saat lagi.',
+            ]);
+        }
     }
 
     /**

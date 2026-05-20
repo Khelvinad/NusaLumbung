@@ -83,9 +83,13 @@
                 <div x-data="{ userOpen: false }" class="relative">
                     <button @click="userOpen = !userOpen"
                         class="flex items-center gap-2 text-sm font-medium text-[#2D5A27] hover:text-[#7FB069] transition">
-                        <div class="w-8 h-8 rounded-full bg-[#2D5A27]/10 flex items-center justify-center text-xs font-bold text-[#2D5A27]">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-                        </div>
+                        @if(auth()->user()->photo_path)
+                            <img src="{{ Storage::url(auth()->user()->photo_path) }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+                        @else
+                            <div class="w-8 h-8 rounded-full bg-[#2D5A27]/10 flex items-center justify-center text-xs font-bold text-[#2D5A27]">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                            </div>
+                        @endif
                         <span class="hidden sm:inline">{{ auth()->user()->name }}</span>
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />

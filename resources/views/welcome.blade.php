@@ -252,62 +252,23 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        {{-- Card Beras --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition">
-            <div class="relative h-48 overflow-hidden">
-                <img src="{{ asset('images/beras.jpg') }}"
-                    alt="Beras" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                    Beras
-                </span>
+        @forelse($unggulan as $item)
+            <x-product-card
+                :id="$item->id"
+                :gambar="$item->photo_path ?? ''"
+                :kategori="ucfirst($item->category)"
+                :nama="$item->name"
+                :asal="($item->user?->petaniProfile?->farm_name ?? $item->user?->name ?? 'Petani Nusa Lumbung') . ($item->user?->petaniProfile?->location ? ' · ' . $item->user->petaniProfile->location : '')"
+                :harga="(int) $item->price"
+                :satuan="'kg'"
+                :stok="$item->stock > 0 ? 'Tersedia' : 'Habis'"
+                :dataKategori="$item->category"
+            />
+        @empty
+            <div class="col-span-1 md:col-span-3 text-center py-10 text-[#1A1C19]/50">
+                Belum ada produk unggulan saat ini.
             </div>
-            <div class="p-5">
-                <h3 class="font-bold text-[#1A1C19] mb-1">Beras Organik Premium</h3>
-                <p class="text-xs text-[#1A1C19]/50 mb-3">Petani Jawa Tengah · Panen Minggu Ini</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-[#F2A65A] font-bold font-mono">Rp 14.500 <span class="text-xs font-normal text-[#1A1C19]/50">/ kg</span></p>
-                    <span class="text-xs bg-[#F9FBF9] text-[#7FB069] border border-[#7FB069] px-2 py-1 rounded-full">Stok Tersedia</span>
-                </div>
-            </div>
-        </div>
-
-        {{-- Card Kopi --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition">
-            <div class="relative h-48 overflow-hidden">
-                <img src="{{ asset('images/kopi.jpeg') }}"
-                    alt="Kopi" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                    Kopi
-                </span>
-            </div>
-            <div class="p-5">
-                <h3 class="font-bold text-[#1A1C19] mb-1">Kopi Arabika Gayo</h3>
-                <p class="text-xs text-[#1A1C19]/50 mb-3">Petani Aceh · Roast Level Medium</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-[#F2A65A] font-bold font-mono">Rp 85.000 <span class="text-xs font-normal text-[#1A1C19]/50">/ kg</span></p>
-                    <span class="text-xs bg-[#F9FBF9] text-[#7FB069] border border-[#7FB069] px-2 py-1 rounded-full">Stok Tersedia</span>
-                </div>
-            </div>
-        </div>
-
-        {{-- Card Cabai --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition">
-            <div class="relative h-48 overflow-hidden">
-                <img src="{{ asset('images/cabai.jpg') }}"
-                    alt="Cabai" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                <span class="absolute top-3 left-3 bg-white text-[#2D5A27] text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                    Cabai
-                </span>
-            </div>
-            <div class="p-5">
-                <h3 class="font-bold text-[#1A1C19] mb-1">Cabai Merah Keriting</h3>
-                <p class="text-xs text-[#1A1C19]/50 mb-3">Petani Jawa Timur · Segar Dipetik</p>
-                <div class="flex items-center justify-between">
-                    <p class="text-[#F2A65A] font-bold font-mono">Rp 32.000 <span class="text-xs font-normal text-[#1A1C19]/50">/ kg</span></p>
-                    <span class="text-xs bg-[#F9FBF9] text-[#7FB069] border border-[#7FB069] px-2 py-1 rounded-full">Stok Tersedia</span>
-                </div>
-            </div>
-        </div>
+        @endforelse
 
     </div>
 
@@ -599,9 +560,9 @@
 
             {{-- Khelvin --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center hover:shadow-md transition">
-                <img src="{{ asset('images/kelpin.png') }}"
-                    alt="Khelvin"
-                    class="w-32 h-32 rounded-full object-cover object-top mx-auto mb-4 border-4 border-[#2D5A27]">
+                <div class="w-32 h-32 rounded-full bg-[#2D5A27] flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">
+                    K
+                </div>
                 <h4 class="font-bold text-[#1A1C19] text-lg">Khelvin</h4>
                 <p class="text-sm text-[#F2A65A] font-medium mb-3">Co-Founder & Business Development</p>
                 <p class="text-xs text-[#1A1C19]/60 leading-relaxed">

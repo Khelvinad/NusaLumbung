@@ -35,67 +35,92 @@
                 @csrf
 
                 {{-- Nama Lengkap --}}
-                <input type="text" name="name" placeholder="Nama Lengkap"
-                    class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                <div>
+                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Nama Lengkap" autofocus
+                        class="w-full border @error('name') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                    @error('name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- Email --}}
-                <input type="email" name="email" placeholder="Email"
-                    class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                <div>
+                    <input type="text" name="email" value="{{ old('email') }}" placeholder="Email"
+                        class="w-full border @error('email') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                    @error('email')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- Nomor HP --}}
-                <input type="tel" name="phone" placeholder="Nomor HP"
-                    class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                <div>
+                    <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Nomor HP"
+                        class="w-full border @error('phone') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                    @error('phone')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 {{-- Role --}}
                 <div>
                     <p class="text-sm text-[#1A1C19]/70 mb-2">Role:</p>
                     <div class="flex gap-6 text-sm">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="role" value="petani" checked class="accent-[#2D5A27]">
+                            <input type="radio" name="role" value="petani" {{ old('role', 'petani') === 'petani' ? 'checked' : '' }} class="accent-[#2D5A27]">
                             <span class="text-[#1A1C19]">Petani</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="role" value="pembeli" class="accent-[#2D5A27]">
+                            <input type="radio" name="role" value="pembeli" {{ old('role') === 'pembeli' ? 'checked' : '' }} class="accent-[#2D5A27]">
                             <span class="text-[#1A1C19]">Pembeli</span>
                         </label>
                     </div>
+                    @error('role')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Password --}}
-                <div class="relative">
-                    <input type="password" name="password" id="password-reg" placeholder="Password"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
-                    <button type="button" onclick="togglePassword('password-reg', 'eye-reg')"
-                        class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
-                        <svg id="eye-reg" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
+                <div>
+                    <div class="relative">
+                        <input type="password" name="password" id="password-reg" placeholder="Password"
+                            class="w-full border @error('password') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
+                        <button type="button" onclick="togglePassword('password-reg', 'eye-reg')"
+                            class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
+                            <svg id="eye-reg" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    @error('password')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Konfirmasi Password --}}
-                <div class="relative">
-                    <input type="password" name="password_confirmation" id="password-confirm" placeholder="Konfirmasi Password"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
-                    <button type="button" onclick="togglePassword('password-confirm', 'eye-confirm')"
-                        class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
-                        <svg id="eye-confirm" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
+                <div>
+                    <div class="relative">
+                        <input type="password" name="password_confirmation" id="password-confirm" placeholder="Konfirmasi Password"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
+                        <button type="button" onclick="togglePassword('password-confirm', 'eye-confirm')"
+                            class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
+                            <svg id="eye-confirm" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {{-- Syarat & Ketentuan --}}
                 <label class="flex items-center gap-2 text-sm text-[#1A1C19]/70 cursor-pointer">
-                    <input type="checkbox" class="accent-[#2D5A27]">
+                    <input type="checkbox" name="terms" class="accent-[#2D5A27]">
                     Saya menyetujui <a href="#" class="text-[#2D5A27] hover:text-[#7FB069] transition">syarat & ketentuan</a>
                 </label>
 

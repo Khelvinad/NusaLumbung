@@ -36,24 +36,32 @@
 
                 {{-- Email --}}
                 <div>
-                    <input type="email" name="email" placeholder="Email"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"
+                        class="w-full border @error('email') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition">
+                    @error('email')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Password --}}
-                <div class="relative">
-                    <input type="password" name="password" id="password-login" placeholder="Password"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
-                    <button type="button" onclick="togglePassword('password-login', 'eye-login')"
-                        class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
-                        <svg id="eye-login" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
+                <div>
+                    <div class="relative">
+                        <input type="password" name="password" id="password-login" placeholder="Password"
+                            class="w-full border @error('password') border-red-500 @else border-gray-200 @enderror rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2D5A27] transition pr-10">
+                        <button type="button" onclick="togglePassword('password-login', 'eye-login')"
+                            class="absolute right-3 top-3 text-gray-400 hover:text-[#2D5A27]">
+                            <svg id="eye-login" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    @error('password')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Ingat Saya & Lupa Password --}}

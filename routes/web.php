@@ -12,7 +12,8 @@ use App\Http\Controllers\NotificationController;
 
 // ─── Public Pages ────────────────────────────────────────────────
 Route::get('/', function () {
-    return view('welcome');
+    $unggulan = \App\Models\Product::with('user.petaniProfile')->latest()->take(3)->get();
+    return view('welcome', compact('unggulan'));
 })->name('home');
 
 Route::get('/produk', [MarketplaceController::class, 'index'])->name('produk.index');

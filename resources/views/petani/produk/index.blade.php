@@ -60,7 +60,7 @@
                                 Edit
                             </a>
                             <form action="{{ route('petani.produk.destroy', $item) }}" method="POST" class="flex-1"
-                                onsubmit="return confirm('Yakin hapus produk ini?')">
+                                onsubmit="nusaConfirmForm(event, 'Yakin hapus produk ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

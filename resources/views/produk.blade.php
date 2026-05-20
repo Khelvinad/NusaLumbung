@@ -152,8 +152,9 @@
 
     function tambahKeKeranjang(id, nama, harga) {
         @guest
-            alert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.');
-            window.location.href = '{{ route("login") }}';
+            nusaAlert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.', 'warning').then(() => {
+                window.location.href = '{{ route("login") }}';
+            });
             return;
         @else
             if (!id) return;

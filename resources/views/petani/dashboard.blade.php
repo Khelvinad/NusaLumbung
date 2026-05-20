@@ -66,9 +66,13 @@
                         <p class="font-semibold text-[#1A1C19] text-sm">
                             Order #{{ $order->id }} — {{ $order->pembeli->name ?? 'Pembeli' }}
                         </p>
-                        <p class="text-xs text-[#1A1C19]/50 mt-0.5">
+                        <p class="text-xs text-[#1A1C19]/50 mt-0.5 mb-2">
                             {{ $order->created_at->diffForHumans() }}
                         </p>
+                        <div class="text-xs text-[#1A1C19]/70 bg-gray-50 p-2 rounded border border-gray-100 mb-2">
+                            <p><strong>No HP:</strong> {{ $order->pembeli->phone ?? '-' }}</p>
+                            <p><strong>Alamat:</strong> {{ $order->pembeli->address ?? '-' }}</p>
+                        </div>
                         <div class="mt-2 flex gap-2">
                             @if(($order->status->value ?? $order->status) === 'pending')
                                 <form action="{{ route('petani.orders.confirm', $order) }}" method="POST">

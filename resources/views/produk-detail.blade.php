@@ -89,9 +89,13 @@
             @if($product->user)
             <a href="{{ route('petani.show', $product->user) }}"
                 class="flex items-center gap-4 bg-white border border-gray-100 rounded-2xl p-4 hover:border-[#2D5A27] transition group">
-                <div class="w-12 h-12 rounded-full bg-[#2D5A27]/10 flex items-center justify-center text-xl flex-shrink-0">
-                    🧑‍🌾
-                </div>
+                @if($product->user->photo_path)
+                    <img src="{{ Storage::url($product->user->photo_path) }}" alt="{{ $product->user->name }}" class="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-gray-200">
+                @else
+                    <div class="w-12 h-12 rounded-full bg-[#2D5A27]/10 flex items-center justify-center text-xl flex-shrink-0">
+                        🧑‍🌾
+                    </div>
+                @endif
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-[#1A1C19]/50 mb-0.5">Dijual oleh</p>
                     <p class="font-bold text-[#1A1C19] truncate">
@@ -160,9 +164,14 @@
 
 <script>
     let qty = 1;
+    const maxStok = {{ $product->stock }};
 
     function changeQty(delta) {
         qty = Math.max(1, qty + delta);
+        if (qty > maxStok) {
+            qty = maxStok;
+            nusaAlert('Maksimal stok yang tersedia adalah ' + maxStok, 'warning');
+        }
         document.getElementById('qty-display').textContent = qty;
     }
 
@@ -178,8 +187,9 @@
 
     function tambahKeKeranjang(id, nama, harga) {
         @guest
-            alert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.');
-            window.location.href = '{{ route("login") }}';
+            nusaAlert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.', 'warning').then(() => {
+                window.location.href = '{{ route("login") }}';
+            });
             return;
         @else
             if (!id) return;

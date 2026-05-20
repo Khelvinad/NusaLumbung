@@ -9,9 +9,13 @@
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center md:items-start gap-6">
 
         {{-- Avatar --}}
-        <div class="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center text-5xl flex-shrink-0">
-            🧑‍🌾
-        </div>
+        @if($user->photo_path)
+            <img src="{{ Storage::url($user->photo_path) }}" alt="{{ $user->name }}" class="w-24 h-24 rounded-full object-cover flex-shrink-0 border-2 border-white/20 bg-white/20">
+        @else
+            <div class="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center text-5xl flex-shrink-0">
+                🧑‍🌾
+            </div>
+        @endif
 
         {{-- Info --}}
         <div class="text-center md:text-left">
@@ -91,8 +95,9 @@
 
     function tambahKeKeranjang(id, nama, harga) {
         @guest
-            alert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.');
-            window.location.href = '{{ route("login") }}';
+            nusaAlert('Silakan masuk atau daftar terlebih dahulu untuk berbelanja.', 'warning').then(() => {
+                window.location.href = '{{ route("login") }}';
+            });
             return;
         @else
             if (!id) return;

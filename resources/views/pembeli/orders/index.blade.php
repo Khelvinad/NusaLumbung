@@ -34,9 +34,17 @@
                             </span>
                             <x-order-status-badge :status="$order->status->value ?? $order->status" />
                         </div>
-                        <p class="text-sm text-[#1A1C19]/70 mb-4">
-                            Petani: <span class="font-semibold">{{ $order->petani->name }}</span>
-                        </p>
+                        <div class="mb-4 text-sm text-[#1A1C19]/70 space-y-1">
+                            <p>Petani: <span class="font-semibold">{{ $order->petani->name }}</span></p>
+                            @if(auth()->user()->hasRole('petani') && $order->petani_id === auth()->id())
+                                <div class="bg-gray-50 p-2 rounded mt-2 text-xs border border-gray-100">
+                                    <p class="font-bold text-[#1A1C19] mb-1">Info Pengiriman (Pembeli):</p>
+                                    <p>Nama: <span class="font-semibold">{{ $order->pembeli->name }}</span></p>
+                                    <p>No HP: <span class="font-semibold">{{ $order->pembeli->phone ?? '-' }}</span></p>
+                                    <p>Alamat: <span class="font-semibold">{{ $order->pembeli->address ?? '-' }}</span></p>
+                                </div>
+                            @endif
+                        </div>
                         
                         <div class="space-y-2">
                             @foreach($order->items as $item)

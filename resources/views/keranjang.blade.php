@@ -168,7 +168,21 @@
 
     async function checkout() {
         if (keranjang.length === 0) {
-            alert('Keranjang masih kosong!');
+            nusaAlert('Keranjang masih kosong!', 'warning');
+            return;
+        }
+
+        const confirmResult = await Swal.fire({
+            text: 'Apakah Anda yakin ingin memproses pesanan ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#2D5A27',
+            cancelButtonColor: '#a1a1aa',
+            confirmButtonText: 'Ya, Proses',
+            cancelButtonText: 'Batal'
+        });
+
+        if (!confirmResult.isConfirmed) {
             return;
         }
 
@@ -194,13 +208,14 @@
             });
 
             if (response.status === 401) {
-                alert('Silakan login terlebih dahulu untuk checkout.');
-                window.location.href = '{{ route("login") }}';
+                nusaAlert('Silakan login terlebih dahulu untuk checkout.', 'warning').then(() => {
+                    window.location.href = '{{ route("login") }}';
+                });
                 return;
             }
 
             if (response.status === 403) {
-                alert('Anda harus mendaftar sebagai Pembeli untuk melakukan checkout.');
+                nusaAlert('Anda harus mendaftar sebagai Pembeli untuk melakukan checkout.', 'warning');
                 btn.textContent = originalText;
                 btn.disabled = false;
                 return;
@@ -211,13 +226,16 @@
                 window.location.href = '{{ route("pembeli.orders.index") }}';
             } else {
                 const data = await response.json();
-                alert('Gagal checkout: ' + (data.message || 'Terjadi kesalahan pada sistem.'));
+                await nusaAlert('Gagal checkout: ' + (data.message || 'Terjadi kesalahan pada sistem.'), 'error');
+                if (response.status === 422 && data.message && data.message.includes('profil')) {
+                    window.location.href = '{{ route("profile.edit") }}';
+                }
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
         } catch (e) {
             console.error(e);
-            alert('Terjadi kesalahan jaringan.');
+            nusaAlert('Terjadi kesalahan jaringan.', 'error');
             btn.textContent = originalText;
             btn.disabled = false;
         }
